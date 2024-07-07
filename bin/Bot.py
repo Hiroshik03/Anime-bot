@@ -13,7 +13,7 @@ class anime_select(discord.ui.Select):
         options =[]
         for i in range(iteration*10):
             options.append(discord.SelectOption(label=list[i][1], description='Your favourite anime', emoji='🟦'))
-        super().__init__(placeholder='Pick your colour', min_values=1, max_values=1, options=options)
+        super().__init__(placeholder='Pick your colour', min_values=1, max_values=1, options=options)---------
     async def callback(self,interaction):
         await interaction.response.send_message(f'Your favourite anime {self.values[0]}', ephemeral=True)
 @bot.event
