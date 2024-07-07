@@ -5,17 +5,9 @@ import parser_anime
 import random
 import discord
 import anime_db as DB
+import hui
 
 bot = discord.Bot()
-
-class anime_select(discord.ui.Select):
-    def __init__(self, list,iteration):
-        options =[]
-        for i in range(iteration*10):
-            options.append(discord.SelectOption(label=list[i][1], description='Your favourite anime', emoji='🟦'))
-        super().__init__(placeholder='Pick your colour', min_values=1, max_values=1, options=options)---------
-    async def callback(self,interaction):
-        await interaction.response.send_message(f'Your favourite anime {self.values[0]}', ephemeral=True)
 @bot.event
 async def on_ready():
     print(f'Бот:{bot.user.display_name} готов!')
@@ -93,7 +85,7 @@ async def search_anime_by_genre(ctx,year):
         embed.add_field(name="-----------------------------",value='', inline=False)
         embed.add_field(name=f"**{list[qeue][1]}**", value=f"рейтинг {list[qeue][3]}🌟",inline=False)
     embed.set_author(name=f"{bot.user.display_name}", icon_url=bot.user.avatar.url)
-    message = await ctx.respond(embed=embed)
+    message = await ctx.channel.send(embed=embed)
     while True:
         await message.add_reaction("📄")
         if (qeue!= len(list)-1): await message.add_reaction("➡")
@@ -125,7 +117,7 @@ async def search_anime_by_genre(ctx,year):
             case "📄" :
                 await message.delete()
                 view = discord.ui.View(timeout=10)
-                view.add_item(anime_select(list=list,iteration=iteration))
+                view.add_item(hui.anime_selecting(list=list,iteration=iteration))
                 await ctx.send('What is your favourite anime?', view=view)
                 break
             case "✖":
@@ -133,4 +125,4 @@ async def search_anime_by_genre(ctx,year):
                 print("Выход")
                 break
 
-bot.run()
+bot.run("MTA5MjA2NDk4NDI2OTMyODQ1NA.G7gcjW.2_fc4lAJ_xuoZ_fRfAu7DV7LzTtCBVO9joVVcA")

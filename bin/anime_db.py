@@ -46,3 +46,9 @@ async def anime_on_year(year):
         except:
             return "По запросу не нашлось аниме"
     return anime
+async def on_name_finder(name):
+    connection = sqlite3.connect('anime.db')
+    cursor = connection.cursor()
+    cursor.execute('SELECT * FROM Anime WHERE name =?', [name])
+    anime = cursor.fetchall()
+    return anime
