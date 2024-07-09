@@ -6,6 +6,7 @@ import random
 import discord
 import anime_db as DB
 import hui
+from League_parse import summoner
 
 bot = discord.Bot()
 @bot.event
@@ -67,8 +68,8 @@ async def today_anime(ctx):
                 await message.delete()
                 print("Выход")
                 break
-@bot.slash_command(name='search_anime_by_genre', description='Поиск аниме по дате выхода')
-async def search_anime_by_genre(ctx,year):
+@bot.slash_command(name='search_anime_by_year', description='Поиск аниме по дате выхода', guild_ids=[1028741714401296444])
+async def search_anime_by_year(ctx,year):
     iteration = 1
     qeue = 0
     chanel = ctx.channel
@@ -124,5 +125,28 @@ async def search_anime_by_genre(ctx,year):
                 await message.delete()
                 print("Выход")
                 break
+@bot.slash_command (name = 'summoner_info', description= 'Поиск призывателей')
+async def summoner_info(
+    ctx,
+    region: discord.Option(str, choices=['ru','en']),
+    name,
+    tag
+    ):
+    try: 
+        player = await summoner.find(region,name,tag)
+        embed = discord.Embed(
+        title=player.nick,
+        description=f"",
+        color=discord.Colour.blurple(),
+        )
+        embed.set_thumbnail(url=player.icon_url)
+        embed.set_author(name=f"{bot.user.display_name}", icon_url=bot.user.avatar.url)
+        embed.add_field(name="Уровень", value = player.level)
+        embed.add_field(name="Ранг", value = f"{player.rank}\n")
+        embed.add_field(name="Игры", value = player.win_lose)
+        embed.add_field(name="Винрейт", value =player.winrate)
+        #embed.set_image(url=player.rank_icon)
+        await ctx.respond(embed=embed)
+    except: await ctx.respond("Призыватель не найден :с")
 
 bot.run("MTA5MjA2NDk4NDI2OTMyODQ1NA.G7gcjW.2_fc4lAJ_xuoZ_fRfAu7DV7LzTtCBVO9joVVcA")
